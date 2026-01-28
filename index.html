@@ -190,12 +190,18 @@
             border: 2px solid #fff;
         }
 
-        .stream-card:hover .add-icon {
-            transform: scale(1.2);
-            background: white;
-            color: var(--accent-red);
-        }
-    </style>
+.stream-card:hover .add-icon {
+    transform: scale(1.2);
+    background: white;
+    color: var(--accent-red);
+}
+
+.video-container iframe {
+    pointer-events: auto;
+}
+
+</style>
+
 </head>
 <body>
 
@@ -291,23 +297,28 @@ function renderCard(gameName, info) {
             card.className = 'stream-card';
             
             // Makes the card clickable to add the stream to the theater
-            card.style.cursor = "pointer";
 
             const divId = `player-${info.user}`;
             const isKick = info.platform === "kick";
 
 card.innerHTML = `
-                <div class="video-container" id="${divId}" style="position: relative;">
-                    <div class="add-icon">+</div>
-                    ${isKick ? `<iframe src="https://player.kick.com/${info.user}?autoplay=false&muted=true" height="100%" width="100%" frameborder="0" allowfullscreen="true" style="pointer-events: none;"></iframe>` : ''}
-                </div>
-                <div class="card-info">
-                    <span style="font-weight: bold;">${gameName}</span>
-                    <span class="live-tag" style="background: ${isKick ? '#53fc18' : '#FF4444'}; color: black;">
-                        ${info.platform}
-                    </span>
-                </div>
-`; // This closes the card.innerHTML block
+    <div class="video-container" id="${divId}" style="position: relative;">
+        <div class="add-icon">+</div>
+        ${isKick ? `<iframe src="https://player.kick.com/${info.user}?autoplay=false&muted=true" height="100%" width="100%" frameborder="0" allowfullscreen="true"></iframe>` : ''}
+    </div>
+    <div class="card-info">
+        <span style="font-weight: bold;">${gameName}</span>
+        <span class="live-tag" style="background: ${isKick ? '#53fc18' : '#FF4444'}; color: black;">
+            ${info.platform}
+        </span>
+    </div>
+`;const addBtn = card.querySelector(".add-icon");
+addBtn.onclick = (e) => {
+    e.stopPropagation(); // prevents the click from affecting the rest of the card
+    addToTheater(info.user, info.platform);
+};
+ // closes card.innerHTML
+
 
             // Link the "+" button to the Theater function
             const addBtn = card.querySelector(".add-icon");
