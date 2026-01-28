@@ -328,11 +328,16 @@ function addToTheater(user, platform) {
     const stage = document.getElementById('main-stage');
     const container = document.getElementById('theater-container');
     
-    // MAX 4 streams
-    if (container.children.length >= 4) {
-        alert("You can only add up to 4 streams in the theater!");
-        return;
-    }
+// MAX 4 streams
+if (container.children.length >= 4) {
+    // quick flash on the theater to show it's full
+    stage.style.boxShadow = "0 0 25px rgba(255,68,68,0.8)";
+    setTimeout(() => {
+        stage.style.boxShadow = "0 0 20px rgba(255, 68, 68, 0.2)";
+    }, 250);
+    return;
+}
+
 
     const theaterId = `theater-${user}`;
     if (document.getElementById(theaterId)) return; // avoid duplicates
