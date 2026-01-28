@@ -20,6 +20,13 @@
             margin: 0; padding: 20px;
         }
 
+        header {
+            border-bottom: 1px solid #222;
+            padding-bottom: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
         .feature-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -34,11 +41,12 @@
             text-align: center;
             border: 1px solid #222;
             transition: 0.3s;
+            cursor: pointer;
         }
 
         .feature-card:hover { border-color: var(--accent-red); transform: translateY(-5px); }
 
-        /* THE NEW HOVER EFFECT */
+        /* THE HOVER OVERLAY EFFECT */
         .stream-card { 
             position: relative; 
             background: var(--card-bg); 
@@ -59,7 +67,7 @@
 
         .stream-card:hover::after { opacity: 1; }
 
-        .video-container { aspect-ratio: 16/9; background: #000; }
+        .video-container { aspect-ratio: 16/9; background: #000; pointer-events: none; }
 
         #main-stage {
             display: none;
@@ -68,6 +76,7 @@
             border: 2px solid var(--accent-red);
             padding: 15px;
             border-radius: 8px;
+            box-shadow: 0 0 20px rgba(255, 68, 68, 0.2);
         }
 
         #theater-container {
@@ -75,29 +84,51 @@
             grid-template-columns: repeat(auto-fit, minmax(45%, 1fr));
             gap: 15px;
         }
+
+        .card-info { padding: 12px; display: flex; justify-content: space-between; align-items: center; }
+        .live-tag { font-size: 0.8em; padding: 2px 8px; border-radius: 4px; font-weight: bold; }
     </style>
 </head>
 <body>
 
+    <header>
+        <h1>TheTownsRP.TV</h1>
+    </header>
+
     <div class="feature-grid">
-        <div class="feature-card" onclick="toggleTheater()" style="cursor: pointer;">
-            <div style="font-size: 50px;">📺</div>
+        <div class="feature-card" onclick="toggleTheater()">
+            <div style="font-size: 50px; color: var(--accent-red);">📺</div>
             <h3>Multi-Stream</h3>
-            <p>Click here to open the theater stage!</p>
+            <p>Click to open the theater stage!</p>
+        </div>
+        <div class="feature-card">
+            <div style="font-size: 50px; color: var(--accent-red);">💬</div>
+            <h3>Integrated Chat</h3>
+            <p>Coming soon!</p>
+        </div>
+        <div class="feature-card">
+            <div style="font-size: 50px; color: var(--accent-red);">❤️</div>
+            <h3>Favorites</h3>
+            <p>Coming soon!</p>
         </div>
     </div>
 
     <div id="main-stage">
         <div id="theater-container"></div>
-        <button onclick="clearTheater()" style="margin-top: 10px; padding: 10px; cursor: pointer;">Clear All Streams</button>
+        <div style="margin-top: 15px; display: flex; justify-content: space-between;">
+            <button onclick="clearTheater()" style="background: #333; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">Clear All Streams</button>
+        </div>
     </div>
 
+    <h2 style="margin-bottom: 20px;">Live Community Streamers</h2>
     <div class="feature-grid" id="streamer-grid"></div>
 
     <script>
+        // List of streamers to show on the grid
         const streamers = [
-            { user: "indiya", platform: "kick", game: "RP" },
-            { user: "vercetti", platform: "kick", game: "RP" }
+            { user: "indiya", platform: "kick", game: "The Towns RP" },
+            { user: "vercetti", platform: "kick", game: "The Towns RP" },
+            { user: "the_real_mink", platform: "kick", game: "The Towns RP" }
         ];
 
         function renderCard(info) {
@@ -106,15 +137,21 @@
             card.className = 'stream-card';
             card.onclick = () => addToTheater(info.user, info.platform);
 
+            const isKick = info.platform === "kick";
+
             card.innerHTML = `
                 <div class="video-container">
-                    <iframe src="https://player.kick.com/${info.user}?autoplay=false&muted=true" height="100%" width="100%" frameborder="0"></iframe>
+                    ${isKick ? `<iframe src="https://player.kick.com/${info.user}?autoplay=false&muted=true" height="100%" width="100%" frameborder="0"></iframe>` : ''}
                 </div>
-                <div style="padding: 10px;"><strong>${info.user}</strong></div>
+                <div class="card-info">
+                    <strong>${info.user}</strong>
+                    <span class="live-tag" style="background: ${isKick ? '#53fc18' : '#6441a5'}; color: black;">${info.platform.toUpperCase()}</span>
+                </div>
             `;
             grid.appendChild(card);
         }
 
+        // BRAINS: Handles opening/closing and adding streams
         function toggleTheater() {
             const stage = document.getElementById('main-stage');
             stage.style.display = 'block';
@@ -123,14 +160,27 @@
 
         function addToTheater(user, platform) {
             const container = document.getElementById('theater-container');
-            document.getElementById('main-stage').style.display = 'block';
+            const stage = document.getElementById('main-stage');
+            stage.style.display = 'block';
             
-            if (document.getElementById(`theater-${user}`)) return;
+            const theaterId = `theater-${user}`;
+            if (document.getElementById(theaterId)) return;
 
             const wrapper = document.createElement('div');
-            wrapper.id = `theater-${user}`;
-            wrapper.innerHTML = `<iframe src="https://player.kick.com/${user}?autoplay=true" height="300px" width="100%" frameborder="0"></iframe>`;
+            wrapper.id = theaterId;
+            wrapper.style.border = "1px solid #333";
+            wrapper.style.background = "#000";
+            wrapper.style.aspectRatio = "16/9";
+
+            if (platform === "kick") {
+                wrapper.innerHTML = `<iframe src="https://player.kick.com/${user}?autoplay=true&muted=false" height="100%" width="100%" frameborder="0" allowfullscreen="true"></iframe>`;
+            } else {
+                setTimeout(() => {
+                    new Twitch.Player(theaterId, { channel: user, width: "100%", height: "100%", parent: ["thetownscreators.github.io"] });
+                }, 100);
+            }
             container.appendChild(wrapper);
+            stage.scrollIntoView({ behavior: 'smooth' });
         }
 
         function clearTheater() {
@@ -138,6 +188,7 @@
             document.getElementById('main-stage').style.display = 'none';
         }
 
+        // Initialize the grid
         streamers.forEach(renderCard);
     </script>
 </body>
