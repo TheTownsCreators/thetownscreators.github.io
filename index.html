@@ -291,7 +291,6 @@ function renderCard(gameName, info) {
             card.className = 'stream-card';
             
             // Makes the card clickable to add the stream to the theater
-            card.onclick = () => addToTheater(info.user, info.platform);
             card.style.cursor = "pointer";
 
             const divId = `player-${info.user}`;
@@ -308,7 +307,15 @@ card.innerHTML = `
                         ${info.platform}
                     </span>
                 </div>
-            `;
+`; // This closes the card.innerHTML block
+
+            // Link the "+" button to the Theater function
+            const addBtn = card.querySelector(".add-icon");
+            addBtn.onclick = (e) => {
+                e.stopPropagation(); // Prevents clicking the video player behind it
+                addToTheater(info.user, info.platform);
+            };
+
             grid.appendChild(card);
 
             if (info.platform === "twitch") {
