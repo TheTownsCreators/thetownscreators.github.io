@@ -205,7 +205,8 @@
 
 const STREAMER_MAP = {
             "Indiya": { platform: "kick", user: "indiya" },
-            "Annoying": { platform: "kick", user: "annoying" }
+            "Annoying": { platform: "kick", user: "annoying" },
+            "Vercetti": { platform: "kick", user: "vercetti" }
         };
 
         // ==========================================
@@ -265,13 +266,14 @@ const STREAMER_MAP = {
                 });
             }
         }
-// PRACTICE MODE: Forces streams to show without the server being live
+// PRACTICE MODE: Forces 3 streams to show for testing
         function practiceMode() {
             const grid = document.getElementById('streamer-grid');
             if (grid) {
-                grid.innerHTML = ''; // Clears the "Coming Soon" text
+                grid.innerHTML = ''; 
                 renderCard("Indiya is Live", STREAMER_MAP["Indiya"]);
                 renderCard("Annoying is Live", STREAMER_MAP["Annoying"]);
+                renderCard("Vercetti is Live", STREAMER_MAP["Vercetti"]);
             }
         }
 
