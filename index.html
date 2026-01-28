@@ -203,9 +203,9 @@
         // ==========================================
         const CFX_ID = "YOUR_ID"; 
 
-        const STREAMER_MAP = {
-            "PlayerName": { platform: "twitch", user: "twitch_username" },
-            "OtherPlayer": { platform: "kick", user: "kick_username" }
+const STREAMER_MAP = {
+            "Indiya": { platform: "kick", user: "indiya" },
+            "Annoying": { platform: "kick", user: "annoying" }
         };
 
         // ==========================================
@@ -265,8 +265,17 @@
                 });
             }
         }
+// PRACTICE MODE: Forces streams to show without the server being live
+        function practiceMode() {
+            const grid = document.getElementById('streamer-grid');
+            if (grid) {
+                grid.innerHTML = ''; // Clears the "Coming Soon" text
+                renderCard("Indiya is Live", STREAMER_MAP["Indiya"]);
+                renderCard("Annoying is Live", STREAMER_MAP["Annoying"]);
+            }
+        }
 
-        initTheater();
+        practiceMode();
     </script>
 </body>
 </html>
