@@ -163,6 +163,13 @@
             font-size: 0.85rem;
             line-height: 1.4;
         }
+    /* THEATER STREAM SIZE FIX */
+.theater-stream {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #000;
+}
+
     </style>
 </head>
 <body>
@@ -196,8 +203,15 @@
             <p>Save your favorite community streamers and see who is live instantly.</p>
         </div>
     </div>
-<div id="main-stage" style="display: none; margin-bottom: 40px; background: #000; border: 2px solid var(--accent-red); padding: 15px; position: relative; border-radius: 8px; box-shadow: 0 0 20px rgba(255, 68, 68, 0.2);">
-<div id="theater-container" style="display: grid; grid-template-columns: 48% 48%; justify-content: center; gap: 15px; width: 100%;"></div>
+<div id="main-stage" style="display: none; margin-bottom: 40px; background: #000; border: 2px solid var(--accent-red); padding: 8px; position: relative; border-radius: 8px; box-shadow: 0 0 20px rgba(255, 68, 68, 0.2);">
+<div id="theater-container" style="
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+    gap: 20px;
+    width: 100%;
+">
+</div>
+
             </div>
         <div style="margin-top: 15px; display: flex; justify-content: space-between; align-items: center;">
             <p style="margin: 0; font-size: 0.9rem; color: var(--accent-red); font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">Multi-Stream Theater Mode</p>
@@ -286,8 +300,9 @@ function renderCard(gameName, info) {
             const theaterId = `theater-${user}`;
             if (document.getElementById(theaterId)) return; // Prevents duplicates
 
-            const wrapper = document.createElement('div');
-            wrapper.id = theaterId;
+const wrapper = document.createElement('div');
+wrapper.id = theaterId;
+wrapper.className = "theater-stream";
             wrapper.style.border = "1px solid #333";
             wrapper.style.background = "#000";
             wrapper.style.position = "relative";
