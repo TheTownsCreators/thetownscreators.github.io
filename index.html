@@ -260,10 +260,11 @@
         const CFX_ID = "YOUR_ID"; 
 
 const STREAMER_MAP = {
-            "Indiya": { platform: "kick", user: "indiya" },
-            "Annoying": { platform: "kick", user: "annoying" },
-            "Vercetti": { platform: "kick", user: "vercetti" }
-        };
+    "Paybae": { platform: "twitch", user: "paybae" },
+    "Sadi": { platform: "kick", user: "sadi" },
+    "Capp": { platform: "kick", user: "capp" },
+    "Yanirackz": { platform: "twitch", user: "yanirackz" }
+};
 
         // ==========================================
         // LOGIC
@@ -368,17 +369,17 @@ wrapper.className = "theater-stream";
             document.getElementById('main-stage').style.display = 'none';
         }
         // PRACTICE MODE: Forces 3 streams to show for testing
-        function practiceMode() {
-            const grid = document.getElementById('streamer-grid');
-            if (grid) {
-                grid.innerHTML = ''; 
-                renderCard("Indiya is Live", STREAMER_MAP["Indiya"]);
-                renderCard("Annoying is Live", STREAMER_MAP["Annoying"]);
-                renderCard("Vercetti is Live", STREAMER_MAP["Vercetti"]);
-            }
-        }
-
-        practiceMode();
+function practiceMode() {
+    const grid = document.getElementById('streamer-grid');
+    if (grid) {
+        grid.innerHTML = ''; 
+        renderCard("Paybae is Live", STREAMER_MAP["Paybae"]);
+        renderCard("Sadi is Live", STREAMER_MAP["Sadi"]);
+        renderCard("Capp is Live", STREAMER_MAP["Capp"]);
+        renderCard("Yanirackz is Live", STREAMER_MAP["Yanirackz"]);
+    }
+}
+practiceMode();
     </script>
 </body>
 </html>
