@@ -345,9 +345,33 @@ function addToTheater(user, platform) {
     wrapper.style.border = "1px solid #333";
     wrapper.style.background = "#000";
     wrapper.style.position = "relative";
+// Create remove (minus) button
+const removeBtn = document.createElement('div');
+removeBtn.className = 'remove-icon';
+removeBtn.textContent = '−';
+
+removeBtn.onclick = (e) => {
+  e.stopPropagation(); // don't trigger other clicks
+  wrapper.remove();    // remove only this stream
+
+  // If no streams left, hide the theater
+  if (container.children.length === 0) {
+    stage.style.display = 'none';
+  }
+};
+
+wrapper.appendChild(removeBtn);
 
     if (platform === "kick") {
-        wrapper.innerHTML = `<iframe src="https://player.kick.com/${user}?autoplay=true&muted=false" height="100%" width="100%" frameborder="0" allowfullscreen="true"></iframe>`;
+const iframe = document.createElement('iframe');
+iframe.src = `https://player.kick.com/${user}?autoplay=true&muted=false`;
+iframe.width = "100%";
+iframe.height = "100%";
+iframe.frameBorder = "0";
+iframe.allowFullscreen = true;
+
+wrapper.appendChild(iframe);
+
     } else {
         // Twitch
         setTimeout(() => {
