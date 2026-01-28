@@ -123,6 +123,46 @@
             text-align: center;
             padding: 50px;
         }
+        /* RED FEATURE CARDS STYLE */
+        .features-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+            margin-top: 20px;
+        }
+
+        .feature-card {
+            background: #080808;
+            padding: 40px 20px;
+            text-align: center;
+            position: relative;
+            border: 1px solid #111;
+        }
+
+        /* Red Corner Accents */
+        .feature-card::before, .feature-card::after {
+            content: "";
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            border: 2px solid var(--accent-red);
+        }
+        .feature-card::before { top: 0; left: 0; border-right: 0; border-bottom: 0; }
+        .feature-card::after { bottom: 0; right: 0; border-left: 0; border-top: 0; }
+
+        .feature-card h3 {
+            margin: 15px 0 10px 0;
+            text-transform: uppercase;
+            font-size: 1.1rem;
+            color: #fff;
+        }
+
+        .feature-card p {
+            color: var(--text-dim);
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
     </style>
 </head>
 <body>
@@ -135,6 +175,23 @@
         </div>
         <a href="https://discord.gg/jHdxmMdH" target="_blank" class="discord-btn">JOIN OUR DISCORD</a>
     </header>
+    <div class="features-container">
+        <div class="feature-card">
+            <div style="font-size: 30px; color: #FF4444;">📺</div>
+            <h3>Multi-Stream</h3>
+            <p>Watch multiple streams simultaneously with our optimized theater layout.</p>
+        </div>
+        <div class="feature-card">
+            <div style="font-size: 30px; color: #FF4444;">💬</div>
+            <h3>Integrated Chat</h3>
+            <p>Follow all your favorite streamers' chats in one centralized location.</p>
+        </div>
+        <div class="feature-card">
+            <div style="font-size: 30px; color: #FF4444;">❤️</div>
+            <h3>Favorites</h3>
+            <p>Save your favorite community streamers and see who is live instantly.</p>
+        </div>
+    </div>
 
     <div id="streamer-grid">
         <div class="loading-text">Streams will appear here when the city goes live...</div>
