@@ -199,6 +199,31 @@
 .video-container iframe {
     pointer-events: auto;
 }
+/* ===== THEATER 2x2 GRID ===== */
+#theater-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 20px;
+  width: 100%;
+  height: 80vh;
+}
+
+.theater-stream {
+  width: 100%;
+  height: 100%;
+  background: #000;
+  overflow: hidden;
+  border-radius: 10px;
+  border: 1px solid #333;
+}
+
+.theater-stream iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
 
 </style>
 
@@ -235,15 +260,20 @@
         </div>
     </div>
 <div id="main-stage" style="display: none; margin-bottom: 40px; background: #000; border: 2px solid var(--accent-red); padding: 8px; position: relative; border-radius: 8px; box-shadow: 0 0 20px rgba(255, 68, 68, 0.2);">
-<div id="theater-container" style="
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(2, 1fr);
-    gap: 20px;
-    width: 100%;
-    height: 80vh; /* optional, controls total theater height */
-">
+
+  <div id="theater-container"></div>
+
+  <div style="margin-top: 15px; display: flex; justify-content: space-between; align-items: center;">
+      <p style="margin: 0; font-size: 0.9rem; color: var(--accent-red); font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">
+        Multi-Stream Theater Mode
+      </p>
+      <button onclick="clearTheater()" style="background: #222; color: white; border: 1px solid #444; padding: 8px 20px; cursor: pointer; border-radius: 4px; font-size: 12px;">
+        CLOSE THEATER
+      </button>
+  </div>
+
 </div>
+
 
             </div>
         <div style="margin-top: 15px; display: flex; justify-content: space-between; align-items: center;">
