@@ -303,23 +303,7 @@ function renderCard(gameName, info) {
             }
         }
 // THEATER LOGIC: Handles adding and removing streams from the top view
-        function addToTheater(user, platform) {
-            const stage = document.getElementById('main-stage');
-            const container = document.getElementById('theater-container');
-            
-            // Show the theater area
-            stage.style.display = 'block';
-            
-            const theaterId = `theater-${user}`;
-            if (document.getElementById(theaterId)) return; // Prevents duplicates
 
-            const wrapper = document.createElement('div');
-            wrapper.id = theaterId;
-            wrapper.style.border = "1px solid #333";
-            wrapper.style.background = "#000";
-            wrapper.style.position = "relative";
-
-            if (platform === "kick") {
                 wrapper.innerHTML = `<iframe src="https://player.kick.com/${user}?autoplay=true&muted=false" height="100%" width="100%" frameborder="0" allowfullscreen="true"></iframe>`;
             } else {
                 setTimeout(() => {
@@ -351,7 +335,15 @@ function renderCard(gameName, info) {
             stage.style.display = 'block';
             stage.scrollIntoView({ behavior: 'smooth' });
         }
+function toggleTheater() {
+            const stage = document.getElementById('main-stage');
+            stage.style.display = 'block';
+            stage.scrollIntoView({ behavior: 'smooth' });
+        }
 
+        function addToTheater(user, platform) {
+            const container = document.getElementById('theater-container');
+            // ... the rest of your function ...
         function addToTheater(user, platform) {
             const container = document.getElementById('theater-container');
             const stage = document.getElementById('main-stage');
