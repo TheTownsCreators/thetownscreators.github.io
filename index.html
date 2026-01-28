@@ -193,7 +193,7 @@
         </div>
     </div>
 <div id="main-stage" style="display: none; margin-bottom: 40px; background: #000; border: 2px solid var(--accent-red); padding: 15px; position: relative; border-radius: 8px; box-shadow: 0 0 20px rgba(255, 68, 68, 0.2);">
-<div id="theater-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 10px; width: 100%;">
+<div id="theater-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 15px; width: 100%;"></div>
     <input type="text" id="streamer-search" placeholder="Enter Kick Username..." 
            style="flex-grow: 1; background: #000; border: 1px solid var(--accent-red); color: white; padding: 10px; border-radius: 4px; outline: none;">
     <button onclick="manualAdd()" 
@@ -280,33 +280,44 @@ function renderCard(gameName, info) {
             }
         }
 // THEATER LOGIC: Handles adding and removing streams from the top view
-        function addToTheater(user, platform) {
-            const stage = document.getElementById('main-stage');
-            const container = document.getElementById('theater-container');
-            
-            // Show the theater area
-            stage.style.display = 'block';
-            
-            const theaterId = `theater-${user}`;
-            if (document.getElementById(theaterId)) return; // Prevents duplicates
+function addToTheater(user, platform) {
+    const stage = document.getElementById('main-stage');
+    const container = document.getElementById('theater-container');
+    
+    // Show the theater area
+    stage.style.display = 'block';
+    
+    const theaterId = `theater-${user}`;
+    if (document.getElementById(theaterId)) return; // Prevents duplicates
 
-            const wrapper = document.createElement('div');
-            wrapper.id = theaterId;
-            wrapper.style.border = "1px solid #333";
-            wrapper.style.background = "#000";
-            wrapper.style.position = "relative";
+    const wrapper = document.createElement('div');
+    wrapper.id = theaterId;
+    wrapper.style.display = "flex";
+    wrapper.style.flexDirection = "column";
+    wrapper.style.background = "#000";
+    wrapper.style.border = "1px solid #222";
 
-            if (platform === "kick") {
-                wrapper.innerHTML = `<iframe src="https://player.kick.com/${user}?autoplay=true&muted=false" height="100%" width="100%" frameborder="0" allowfullscreen="true"></iframe>`;
-            } else {
-                setTimeout(() => {
-                    new Twitch.Player(theaterId, { channel: user, width: "100%", height: "100%", parent: ["thetownscreators.github.io"] });
-                }, 100);
-            }
-            
-            container.appendChild(wrapper);
-            stage.scrollIntoView({ behavior: 'smooth' });
-        }
+    // Set up the internal layout: Video on left, Chat on right
+    wrapper.innerHTML = `
+        <div style="display: flex; aspect-ratio: 16/9; width: 100%;">
+            <iframe src="https://player.kick.com/${user}" style="flex-grow: 1; border: none;" allowfullscreen="true"></iframe>
+            <iframe id="chat-${user}" src="https://kick.com/${user}/chat" style="width: 300px; display: none; border-left: 1px solid #222;"></iframe>
+        </div>
+        <div style="padding: 8px; background: #111; display: flex; justify-content: space-between; align-items: center;">
+            <span style="color: white; font-size: 12px; font-weight: bold;">${user.toUpperCase()}</span>
+            <button onclick="toggleChat('${user}')" style="background: var(--accent-red); color: white; border: none; padding: 4px 10px; border-radius: 3px; cursor: pointer; font-size: 10px;">Toggle Chat</button>
+        </div>
+    `;
+    
+    container.appendChild(wrapper);
+    stage.scrollIntoView({ behavior: 'smooth' });
+}
+
+// Helper function to show/hide the chat
+function toggleChat(user) {
+    const chat = document.getElementById(`chat-${user}`);
+    chat.style.display = chat.style.display === 'none' ? 'block' : 'none';
+}
 
         function clearTheater() {
             document.getElementById('theater-container').innerHTML = '';
