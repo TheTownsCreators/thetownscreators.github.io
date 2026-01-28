@@ -10,7 +10,7 @@
         :root {
             --bg-color: #000000;
             --card-bg: #111111;
-            --accent-red: #FF4444; /* Your Red Header Color */
+            --accent-red: #FF4444; 
             --kick-green: #53fc18;
             --text-main: #ffffff;
             --text-dim: #888888;
@@ -26,8 +26,12 @@
 
         header {
             border-bottom: 1px solid #222;
-            padding-bottom: 20px;
+            padding-bottom: 30px;
             margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
         }
 
         h1 {
@@ -41,7 +45,39 @@
             margin-top: 5px;
         }
 
-        /* GRID LAYOUT (Like Twitch Recommended) */
+        /* DISCORD BUTTON */
+        .discord-btn {
+            background-color: var(--accent-red);
+            color: white;
+            text-decoration: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            box-shadow: 0 0 15px rgba(255, 68, 68, 0.3);
+        }
+
+        .discord-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(255, 68, 68, 0.6);
+            background-color: #ff6666;
+        }
+
+        /* STATUS BADGE */
+        .status-badge {
+            display: inline-block;
+            border: 1px solid var(--accent-red);
+            color: var(--accent-red);
+            padding: 5px 15px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 10px;
+        }
+
+        /* GRID LAYOUT */
         #streamer-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -76,3 +112,104 @@
         .live-tag {
             padding: 4px 8px;
             border-radius: 4px;
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .loading-text {
+            color: var(--text-dim);
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 50px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div>
+            <h1>TheTownsRP.TV <span style="font-size: 12px; color: #444;">1.0</span></h1>
+            <p class="subtitle">Recommended Streams - Live on the FiveM Server</p>
+            <div class="status-badge">Server Coming Soon</div>
+        </div>
+        <a href="https://discord.gg/jHdxmMdH" target="_blank" class="discord-btn">JOIN OUR DISCORD</a>
+    </header>
+
+    <div id="streamer-grid">
+        <div class="loading-text">Streams will appear here when the city goes live...</div>
+    </div>
+
+    <script>
+        // ==========================================
+        // CONFIGURATION (Fill these in later!)
+        // ==========================================
+        const CFX_ID = "YOUR_ID"; 
+
+        const STREAMER_MAP = {
+            "PlayerName": { platform: "twitch", user: "twitch_username" },
+            "OtherPlayer": { platform: "kick", user: "kick_username" }
+        };
+
+        // ==========================================
+        // LOGIC
+        // ==========================================
+        async function initTheater() {
+            const grid = document.getElementById('streamer-grid');
+
+            try {
+                const response = await fetch(`https://servers-frontend.fivem.net/api/servers/single/${CFX_ID}`);
+                const data = await response.json();
+                const players = data.Data.players;
+
+                if (players && players.length > 0) {
+                    grid.innerHTML = '';
+                }
+
+                players.forEach(player => {
+                    const info = STREAMER_MAP[player.name];
+                    if (info) {
+                        renderCard(player.name, info);
+                    }
+                });
+            } catch (e) {
+                console.log("Server not reachable yet.");
+            }
+        }
+
+        function renderCard(gameName, info) {
+            const grid = document.getElementById('streamer-grid');
+            const card = document.createElement('div');
+            card.className = 'stream-card';
+            
+            const divId = `player-${info.user}`;
+            const isKick = info.platform === "kick";
+
+            card.innerHTML = `
+                <div class="video-container" id="${divId}">
+                    ${isKick ? `<iframe src="https://player.kick.com/${info.user}?autoplay=true&muted=true" height="100%" width="100%" frameborder="0" allowfullscreen="true"></iframe>` : ''}
+                </div>
+                <div class="card-info">
+                    <span>${gameName}</span>
+                    <span class="live-tag" style="background: ${isKick ? '#53fc18' : '#FF4444'}; color: black;">
+                        ${info.platform} Live
+                    </span>
+                </div>
+            `;
+            grid.appendChild(card);
+
+            if (info.platform === "twitch") {
+                new Twitch.Player(divId, {
+                    channel: info.user,
+                    width: "100%",
+                    height: "100%",
+                    // IF YOU KEEP YOUR CURRENT NAME, CHANGE THIS TO: thetownsrp.github.io
+                    parent: ["thetownscreators.github.io"] 
+                });
+            }
+        }
+
+        initTheater();
+    </script>
+</body>
+</html>
