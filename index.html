@@ -259,6 +259,9 @@
         // ==========================================
         const CFX_ID = "YOUR_ID"; 
 
+// ================================
+// 1️⃣ STREAMER MAP
+// ================================
 const STREAMER_MAP = {
     "Paybae": { platform: "twitch", user: "paybae" },
     "Sadi": { platform: "kick", user: "sadi" },
@@ -266,110 +269,80 @@ const STREAMER_MAP = {
     "Yanirackz": { platform: "twitch", user: "yanirackz" }
 };
 
-        // ==========================================
-        // LOGIC
-        // ==========================================
-        async function initTheater() {
-            const grid = document.getElementById('streamer-grid');
+// ================================
+// 2️⃣ THEATER FUNCTION
+// ================================
+function addToTheater(user, platform) {
+    const stage = document.getElementById('main-stage');
+    const container = document.getElementById('theater-container');
+    stage.style.display = 'block';
+    
+    const theaterId = `theater-${user}`;
+    if (document.getElementById(theaterId)) return;
 
-            try {
-                const response = await fetch(`https://servers-frontend.fivem.net/api/servers/single/${CFX_ID}`);
-                const data = await response.json();
-                const players = data.Data.players;
+    const wrapper = document.createElement('div');
+    wrapper.id = theaterId;
+    wrapper.style.border = "1px solid #333";
+    wrapper.style.background = "#000";
+    wrapper.style.position = "relative";
 
-                if (players && players.length > 0) {
-                    grid.innerHTML = '';
-                }
+    if (platform === "kick") {
+        wrapper.innerHTML = `<iframe src="https://player.kick.com/${user}?autoplay=true&muted=false" height="100%" width="100%" frameborder="0" allowfullscreen="true"></iframe>`;
+    } else {
+        setTimeout(() => {
+            new Twitch.Player(theaterId, { channel: user, width: "100%", height: "100%", parent: ["thetownscreators.github.io"] });
+        }, 100);
+    }
 
-                players.forEach(player => {
-                    const info = STREAMER_MAP[player.name];
-                    if (info) {
-                        renderCard(player.name, info);
-                    }
-                });
-            } catch (e) {
-                console.log("Server not reachable yet.");
-            }
-        }
+    container.appendChild(wrapper);
+    stage.scrollIntoView({ behavior: 'smooth' });
+}
 
+// ================================
+// 3️⃣ RENDER MINI-CARD FUNCTION
+// ================================
 function renderCard(gameName, info) {
-            const grid = document.getElementById('streamer-grid');
-            const card = document.createElement('div');
-            card.className = 'stream-card';
-            
-            // Makes the card clickable to add the stream to the theater
+    const grid = document.getElementById('streamer-grid');
+    const card = document.createElement('div');
+    card.className = 'stream-card';
+    
+    card.innerHTML = `
+        <div class="video-container" id="${info.user}" style="position: relative;">
+            <div class="add-icon">+</div>
+            ${info.platform === "kick" ? `<iframe src="https://player.kick.com/${info.user}?autoplay=false&muted=true" height="100%" width="100%" frameborder="0" allowfullscreen="true"></iframe>` : ''}
+        </div>
+        <div class="card-info">
+            <span style="font-weight: bold;">${gameName}</span>
+            <span class="live-tag" style="background: ${info.platform === "kick" ? '#53fc18' : '#FF4444'}; color: black;">
+                ${info.platform}
+            </span>
+        </div>
+    `;
 
-            const divId = `player-${info.user}`;
-            const isKick = info.platform === "kick";
+    // Wire the + button
+    const addBtn = card.querySelector(".add-icon");
+    addBtn.onclick = (e) => {
+        e.stopPropagation();
+        addToTheater(info.user, info.platform);
+    };
 
-card.innerHTML = `
-    <div class="video-container" id="${divId}" style="position: relative;">
-        <div class="add-icon">+</div>
-        ${isKick ? `<iframe src="https://player.kick.com/${info.user}?autoplay=false&muted=true" height="100%" width="100%" frameborder="0" allowfullscreen="true"></iframe>` : ''}
-    </div>
-    <div class="card-info">
-        <span style="font-weight: bold;">${gameName}</span>
-        <span class="live-tag" style="background: ${isKick ? '#53fc18' : '#FF4444'}; color: black;">
-            ${info.platform}
-        </span>
-    </div>
-`;const addBtn = card.querySelector(".add-icon");
-addBtn.onclick = (e) => {
-    e.stopPropagation(); // prevents the click from affecting the rest of the card
-    addToTheater(info.user, info.platform);
-};
- // closes card.innerHTML
+    grid.appendChild(card);
 
+    // If Twitch, initialize the mini-player
+    if (info.platform === "twitch") {
+        new Twitch.Player(info.user, {
+            channel: info.user,
+            width: "100%",
+            height: "100%",
+parent: ["localhost"]
+        });
+    }
+}
 
-            // Link the "+" button to the Theater function
-            const addBtn = card.querySelector(".add-icon");
-            addBtn.onclick = (e) => {
-                e.stopPropagation(); // Prevents clicking the video player behind it
-                addToTheater(info.user, info.platform);
-            };
-
-            grid.appendChild(card);
-
-            if (info.platform === "twitch") {
-                new Twitch.Player(divId, { channel: info.user, width: "100%", height: "100%", parent: ["thetownscreators.github.io"] });
-            }
-        }
-// THEATER LOGIC: Handles adding and removing streams from the top view
-        function addToTheater(user, platform) {
-            const stage = document.getElementById('main-stage');
-            const container = document.getElementById('theater-container');
-            
-            // Show the theater area
-            stage.style.display = 'block';
-            
-            const theaterId = `theater-${user}`;
-            if (document.getElementById(theaterId)) return; // Prevents duplicates
-
-const wrapper = document.createElement('div');
-wrapper.id = theaterId;
-wrapper.className = "theater-stream";
-            wrapper.style.border = "1px solid #333";
-            wrapper.style.background = "#000";
-            wrapper.style.position = "relative";
-
-            if (platform === "kick") {
-                wrapper.innerHTML = `<iframe src="https://player.kick.com/${user}?autoplay=true&muted=false" height="100%" width="100%" frameborder="0" allowfullscreen="true"></iframe>`;
-            } else {
-                setTimeout(() => {
-                    new Twitch.Player(theaterId, { channel: user, width: "100%", height: "100%", parent: ["thetownscreators.github.io"] });
-                }, 100);
-            }
-            
-            container.appendChild(wrapper);
-            stage.scrollIntoView({ behavior: 'smooth' });
-        }
-
-        function clearTheater() {
-            document.getElementById('theater-container').innerHTML = '';
-            document.getElementById('main-stage').style.display = 'none';
-        }
-        // PRACTICE MODE: Forces 3 streams to show for testing
-function practiceMode() {
+// ================================
+// 4️⃣ PRACTICE MODE - FORCE 4 CARDS
+// ================================
+window.onload = function() {
     const grid = document.getElementById('streamer-grid');
     if (grid) {
         grid.innerHTML = ''; 
@@ -378,6 +351,7 @@ function practiceMode() {
         renderCard("Capp is Live", STREAMER_MAP["Capp"]);
         renderCard("Yanirackz is Live", STREAMER_MAP["Yanirackz"]);
     }
+};
 }
 practiceMode();
     </script>
