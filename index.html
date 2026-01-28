@@ -6,171 +6,287 @@
     <title>TheTownsRP.TV | Multi-Stream Theater</title>
     <script src="https://embed.twitch.tv/embed/v1.js"></script>
     <style>
+        /* THE THEME: Black, Red, and Sleek */
         :root {
             --bg-color: #000000;
             --card-bg: #111111;
-            --accent-red: #FF4444;
+            --accent-red: #FF4444; 
+            --kick-green: #53fc18;
             --text-main: #ffffff;
+            --text-dim: #888888;
         }
 
         body {
             background-color: var(--bg-color);
             color: var(--text-main);
             font-family: 'Segoe UI', sans-serif;
-            margin: 0; padding: 20px;
+            margin: 0;
+            padding: 20px;
         }
 
         header {
             border-bottom: 1px solid #222;
             padding-bottom: 30px;
             margin-bottom: 30px;
-            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
         }
 
-        .feature-grid {
+        h1 {
+            color: var(--accent-red);
+            font-size: 2.2rem;
+            margin: 0;
+        }
+
+        .subtitle {
+            color: var(--text-dim);
+            margin-top: 5px;
+        }
+
+        /* DISCORD BUTTON */
+        .discord-btn {
+            background-color: var(--accent-red);
+            color: white;
+            text-decoration: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            box-shadow: 0 0 15px rgba(255, 68, 68, 0.3);
+        }
+
+        .discord-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(255, 68, 68, 0.6);
+            background-color: #ff6666;
+        }
+
+        /* STATUS BADGE */
+        .status-badge {
+            display: inline-block;
+            border: 1px solid var(--accent-red);
+            color: var(--accent-red);
+            padding: 5px 15px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 10px;
+        }
+
+        /* GRID LAYOUT */
+        #streamer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        .stream-card {
+            background: var(--card-bg);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid #222;
+            transition: 0.3s;
+        }
+
+        .stream-card:hover {
+            border-color: var(--accent-red);
+        }
+
+        .video-container {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background: #000;
+        }
+
+        .card-info {
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .live-tag {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .loading-text {
+            color: var(--text-dim);
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 50px;
+        }
+        /* RED FEATURE CARDS STYLE */
+        .features-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 40px;
+            gap: 30px;
+            margin-bottom: 50px;
+            margin-top: 20px;
         }
 
         .feature-card {
-            background: var(--card-bg);
-            padding: 20px;
-            border-radius: 12px;
+            background: #080808;
+            padding: 40px 20px;
             text-align: center;
-            border: 1px solid #222;
-            transition: 0.3s;
-            cursor: pointer;
+            position: relative;
+            border: 1px solid #111;
         }
 
-        .feature-card:hover { border-color: var(--accent-red); transform: translateY(-5px); }
-
-        /* THE HOVER OVERLAY EFFECT */
-        .stream-card { 
-            position: relative; 
-            background: var(--card-bg); 
-            border-radius: 8px; 
-            overflow: hidden; 
-            cursor: pointer; 
-        }
-
-        .stream-card::after {
-            content: "+ Add to Multi-Stream";
+        /* Red Corner Accents */
+        .feature-card::before, .feature-card::after {
+            content: "";
             position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255, 68, 68, 0.9);
-            color: white;
-            display: flex; align-items: center; justify-content: center;
-            font-weight: bold; opacity: 0; transition: 0.3s; z-index: 10;
-        }
-
-        .stream-card:hover::after { opacity: 1; }
-
-        .video-container { aspect-ratio: 16/9; background: #000; pointer-events: none; }
-
-        #main-stage {
-            display: none;
-            margin-bottom: 40px;
-            background: #000;
+            width: 15px;
+            height: 15px;
             border: 2px solid var(--accent-red);
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 0 20px rgba(255, 68, 68, 0.2);
+        }
+        .feature-card::before { top: 0; left: 0; border-right: 0; border-bottom: 0; }
+        .feature-card::after { bottom: 0; right: 0; border-left: 0; border-top: 0; }
+
+        .feature-card h3 {
+            margin: 15px 0 10px 0;
+            text-transform: uppercase;
+            font-size: 1.1rem;
+            color: #fff;
         }
 
-        #theater-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(45%, 1fr));
-            gap: 15px;
+        .feature-card p {
+            color: var(--text-dim);
+            font-size: 0.85rem;
+            line-height: 1.4;
         }
-
-        .card-info { padding: 12px; display: flex; justify-content: space-between; align-items: center; }
-        .live-tag { font-size: 0.8em; padding: 2px 8px; border-radius: 4px; font-weight: bold; }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>TheTownsRP.TV</h1>
+        <div>
+            <h1>TheTownsRP.TV <span style="font-size: 12px; color: #444;">1.0</span></h1>
+            <p class="subtitle">Recommended Streams - Live on The Towns Roleplay</p>
+            <div class="status-badge">Server: The Towns RP</div>
+        </div>
+        <a href="https://discord.gg/jHdxmMdH" target="_blank" class="discord-btn">JOIN OUR DISCORD</a>
     </header>
-
-    <div class="feature-grid">
-        <div class="feature-card" onclick="toggleTheater()">
-            <div style="font-size: 50px; color: var(--accent-red);">📺</div>
+   <div class="features-container">
+        <div class="feature-card">
+            <div style="font-size: 50px; color: #FF4444; filter: drop-shadow(0 0 10px rgba(255,68,68,0.7)); margin-bottom: 15px;">📺</div>
             <h3>Multi-Stream</h3>
-            <p>Click to open the theater stage!</p>
+            <p>Watch multiple streams simultaneously with our optimized theater layout.</p>
         </div>
         <div class="feature-card">
-            <div style="font-size: 50px; color: var(--accent-red);">💬</div>
+            <div style="font-size: 50px; color: #FF4444; filter: drop-shadow(0 0 10px rgba(255,68,68,0.7)); margin-bottom: 15px;">💬</div>
             <h3>Integrated Chat</h3>
-            <p>Coming soon!</p>
+            <p>Follow all your favorite streamers' chats in one centralized location.</p>
         </div>
         <div class="feature-card">
-            <div style="font-size: 50px; color: var(--accent-red);">❤️</div>
+            <div style="font-size: 50px; color: #FF4444; filter: drop-shadow(0 0 10px rgba(255,68,68,0.7)); margin-bottom: 15px;">❤️</div>
             <h3>Favorites</h3>
-            <p>Coming soon!</p>
+            <p>Save your favorite community streamers and see who is live instantly.</p>
         </div>
     </div>
-
-    <div id="main-stage">
-        <div id="theater-container"></div>
-        <div style="margin-top: 15px; display: flex; justify-content: space-between;">
-            <button onclick="clearTheater()" style="background: #333; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">Clear All Streams</button>
+<div id="main-stage" style="display: none; margin-bottom: 40px; background: #000; border: 2px solid var(--accent-red); padding: 15px; position: relative; border-radius: 8px; box-shadow: 0 0 20px rgba(255, 68, 68, 0.2);">
+        <div id="theater-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(45%, 1fr)); gap: 15px; aspect-ratio: 16/9;">
+            </div>
+        <div style="margin-top: 15px; display: flex; justify-content: space-between; align-items: center;">
+            <p style="margin: 0; font-size: 0.9rem; color: var(--accent-red); font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">Multi-Stream Theater Mode</p>
+            <button onclick="clearTheater()" style="background: #222; color: white; border: 1px solid #444; padding: 8px 20px; cursor: pointer; border-radius: 4px; font-size: 12px; transition: 0.3s;" onmouseover="this.style.background='#333'" onmouseout="this.style.background='#222'">CLOSE THEATER</button>
         </div>
     </div>
-
-    <h2 style="margin-bottom: 20px;">Live Community Streamers</h2>
-    <div class="feature-grid" id="streamer-grid"></div>
+    <div id="streamer-grid">
+        <div class="loading-text">Streams will appear here when the city goes live...</div>
+    </div>
 
     <script>
-        // List of streamers to show on the grid
-        const streamers = [
-            { user: "indiya", platform: "kick", game: "The Towns RP" },
-            { user: "vercetti", platform: "kick", game: "The Towns RP" },
-            { user: "the_real_mink", platform: "kick", game: "The Towns RP" }
-        ];
+        // ==========================================
+        // CONFIGURATION (Fill these in later!)
+        // ==========================================
+        const CFX_ID = "YOUR_ID"; 
 
-        function renderCard(info) {
+const STREAMER_MAP = {
+            "Indiya": { platform: "kick", user: "indiya" },
+            "Annoying": { platform: "kick", user: "annoying" },
+            "Vercetti": { platform: "kick", user: "vercetti" }
+        };
+
+        // ==========================================
+        // LOGIC
+        // ==========================================
+        async function initTheater() {
+            const grid = document.getElementById('streamer-grid');
+
+            try {
+                const response = await fetch(`https://servers-frontend.fivem.net/api/servers/single/${CFX_ID}`);
+                const data = await response.json();
+                const players = data.Data.players;
+
+                if (players && players.length > 0) {
+                    grid.innerHTML = '';
+                }
+
+                players.forEach(player => {
+                    const info = STREAMER_MAP[player.name];
+                    if (info) {
+                        renderCard(player.name, info);
+                    }
+                });
+            } catch (e) {
+                console.log("Server not reachable yet.");
+            }
+        }
+
+function renderCard(gameName, info) {
             const grid = document.getElementById('streamer-grid');
             const card = document.createElement('div');
             card.className = 'stream-card';
+            
+            // Makes the card clickable to add the stream to the theater
             card.onclick = () => addToTheater(info.user, info.platform);
+            card.style.cursor = "pointer";
 
+            const divId = `player-${info.user}`;
             const isKick = info.platform === "kick";
 
             card.innerHTML = `
-                <div class="video-container">
-                    ${isKick ? `<iframe src="https://player.kick.com/${info.user}?autoplay=false&muted=true" height="100%" width="100%" frameborder="0"></iframe>` : ''}
+                <div class="video-container" id="${divId}">
+                    ${isKick ? `<iframe src="https://player.kick.com/${info.user}?autoplay=false&muted=true" height="100%" width="100%" frameborder="0" allowfullscreen="true"></iframe>` : ''}
                 </div>
                 <div class="card-info">
-                    <strong>${info.user}</strong>
-                    <span class="live-tag" style="background: ${isKick ? '#53fc18' : '#6441a5'}; color: black;">${info.platform.toUpperCase()}</span>
+                    <span style="font-weight: bold;">${gameName}</span>
+                    <span class="live-tag" style="background: ${isKick ? '#53fc18' : '#FF4444'}; color: black;">
+                        ${info.platform}
+                    </span>
                 </div>
             `;
             grid.appendChild(card);
-        }
 
-        // BRAINS: Handles opening/closing and adding streams
-        function toggleTheater() {
-            const stage = document.getElementById('main-stage');
-            stage.style.display = 'block';
-            stage.scrollIntoView({ behavior: 'smooth' });
+            if (info.platform === "twitch") {
+                new Twitch.Player(divId, { channel: info.user, width: "100%", height: "100%", parent: ["thetownscreators.github.io"] });
+            }
         }
-
+// THEATER LOGIC: Handles adding and removing streams from the top view
         function addToTheater(user, platform) {
-            const container = document.getElementById('theater-container');
             const stage = document.getElementById('main-stage');
+            const container = document.getElementById('theater-container');
+            
+            // Show the theater area
             stage.style.display = 'block';
             
             const theaterId = `theater-${user}`;
-            if (document.getElementById(theaterId)) return;
+            if (document.getElementById(theaterId)) return; // Prevents duplicates
 
             const wrapper = document.createElement('div');
             wrapper.id = theaterId;
             wrapper.style.border = "1px solid #333";
             wrapper.style.background = "#000";
-            wrapper.style.aspectRatio = "16/9";
+            wrapper.style.position = "relative";
 
             if (platform === "kick") {
                 wrapper.innerHTML = `<iframe src="https://player.kick.com/${user}?autoplay=true&muted=false" height="100%" width="100%" frameborder="0" allowfullscreen="true"></iframe>`;
@@ -179,6 +295,7 @@
                     new Twitch.Player(theaterId, { channel: user, width: "100%", height: "100%", parent: ["thetownscreators.github.io"] });
                 }, 100);
             }
+            
             container.appendChild(wrapper);
             stage.scrollIntoView({ behavior: 'smooth' });
         }
@@ -187,9 +304,18 @@
             document.getElementById('theater-container').innerHTML = '';
             document.getElementById('main-stage').style.display = 'none';
         }
+        // PRACTICE MODE: Forces 3 streams to show for testing
+        function practiceMode() {
+            const grid = document.getElementById('streamer-grid');
+            if (grid) {
+                grid.innerHTML = ''; 
+                renderCard("Indiya is Live", STREAMER_MAP["Indiya"]);
+                renderCard("Annoying is Live", STREAMER_MAP["Annoying"]);
+                renderCard("Vercetti is Live", STREAMER_MAP["Vercetti"]);
+            }
+        }
 
-        // Initialize the grid
-        streamers.forEach(renderCard);
+        practiceMode();
     </script>
 </body>
 </html>
