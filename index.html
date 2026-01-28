@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TheTownsRP.TV | Multi-Stream Theater</title>
+    <script src="https://embed.twitch.tv/embed/v1.js"></script>
+    <style>
+        /* THE THEME: Black, Red, and Sleek */
+        :root {
+            --bg-color: #000000;
+            --card-bg: #111111;
+            --accent-red: #FF4444; /* Your Red Header Color */
+            --kick-green: #53fc18;
+            --text-main: #ffffff;
+            --text-dim: #888888;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        header {
+            border-bottom: 1px solid #222;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: var(--accent-red);
+            font-size: 2.2rem;
+            margin: 0;
+        }
+
+        .subtitle {
+            color: var(--text-dim);
+            margin-top: 5px;
+        }
+
+        /* GRID LAYOUT (Like Twitch Recommended) */
+        #streamer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        .stream-card {
+            background: var(--card-bg);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid #222;
+            transition: 0.3s;
+        }
+
+        .stream-card:hover {
+            border-color: var(--accent-red);
+        }
+
+        .video-container {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background: #000;
+        }
+
+        .card-info {
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .live-tag {
+            padding: 4px 8px;
+            border-radius: 4px;
