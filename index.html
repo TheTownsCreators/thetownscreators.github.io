@@ -316,12 +316,22 @@
     // ================================
     // 1️⃣ STREAMER MAP
     // ================================
-    const STREAMER_MAP = {
-        "Paybae": { platform: "twitch", user: "paybae" },
-        "Sadi": { platform: "kick", user: "sadi" },
-        "Capp": { platform: "kick", user: "capp" },
-        "Yanirackz": { platform: "twitch", user: "yanirackz" }
-    };
+const STREAMER_MAP = {
+  "annoying": { platform: "kick", user: "annoying" },
+  "jaystayupp": { platform: "kick", user: "jaystayupp" },
+  "mdswervin": { platform: "kick", user: "mdswervin" },
+  "capp": { platform: "kick", user: "capp" },
+  "zaayy": { platform: "kick", user: "zaayy" },
+  "sosio": { platform: "kick", user: "sosio" },
+  "tonee": { platform: "kick", user: "tonee" },
+  "vercetti": { platform: "kick", user: "vercetti" },
+  "indiya": { platform: "kick", user: "indiya" },
+  "princesslivee": { platform: "kick", user: "princesslivee" },
+
+  "callupjefe": { platform: "twitch", user: "callupjefe" },
+  "trizzoo": { platform: "twitch", user: "trizzoo" },
+  "paybae": { platform: "twitch", user: "paybae" }
+};
 
     // ================================
     // 2️⃣ ADD TO THEATER FUNCTION
@@ -439,16 +449,16 @@ wrapper.appendChild(iframe);
     // ================================
     // 4️⃣ PRACTICE MODE - AUTO LOAD 4 STREAMS
     // ================================
-    window.onload = function() {
-        const grid = document.getElementById('streamer-grid');
-        if (grid) {
-            grid.innerHTML = ''; 
-            renderCard("Paybae is Live", STREAMER_MAP["Paybae"]);
-            renderCard("Sadi is Live", STREAMER_MAP["Sadi"]);
-            renderCard("Capp is Live", STREAMER_MAP["Capp"]);
-            renderCard("Yanirackz is Live", STREAMER_MAP["Yanirackz"]);
-        }
-    };
+window.onload = function() {
+  const grid = document.getElementById('streamer-grid');
+  if (!grid) return;
+
+  grid.innerHTML = '';
+
+  Object.entries(STREAMER_MAP).forEach(([name, info]) => {
+    renderCard(`${name} is Live`, info);
+  });
+};
 
     // ================================
     // 5️⃣ CLEAR THEATER FUNCTION
